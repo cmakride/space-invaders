@@ -44,6 +44,27 @@ class Projectile {
   }
 }
 
+class Enemy {
+  constructor(x, y, radius, color, velocity) {
+    this.x = x
+    this.y = y
+    this.radius = radius
+    this.color = color
+    this.velocity = velocity
+  }
+  draw() {
+    ctx.beginPath()
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+    ctx.fillStyle = this.color
+    ctx.fill()
+  }
+  update() {
+    this.draw()
+    this.x = this.x + this.velocity.x
+    this.y = this.y + this.velocity.y
+  }
+}
+
 //!dynamically calculate what x and y should be based on the width and size of the canvas
 const x = canvas.width / 2
 const y = canvas.height / 2
@@ -61,26 +82,61 @@ const projectile = new Projectile(
     y: -1
   })
 //! loop through these projectiles array in the animate loop
+
+//creates an array of each instance of a projectile or enemy
 const projectiles = []
+const enemies = []
+
+function spawnEnemies() {
+  //!Create instances of enemies, putting them at random places on the canvas and sending them towards the center
+  setInterval(() => {
+    const radius = Math.random() * (30 - 4) + 4
+    let x
+    let y
+
+    if (Math.random() < 0.5) {
+      x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius
+      y = Math.random() * canvas.height
+      // y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
+    }else{
+      x = Math.random() * canvas.width
+      y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
+    }
+
+    const color = 'green'
+
+    const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x)
+
+    const velocity = {
+      x: Math.cos(angle),
+      y: Math.sin(angle)
+    }
+    enemies.push(new Enemy(x, y, radius, color, velocity))
+  }, 1000)
+
+}
 
 function animate() {
   requestAnimationFrame(animate)
 
   //? clearing the entire canvas
-  ctx.clearRect(0,0,canvas.width,canvas.height)
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
   //?drawing player 
   player.draw()
 
   projectiles.forEach(projectile => {
     projectile.update()
   })
+  enemies.forEach((enemy) => {
+    enemy.update()
+  })
 }
 
 window.addEventListener("click", (event) => {
   //! finding angle of right angle formed of where clicked
-  const angle = Math.atan2(event.clientY-canvas.height/2,event.clientX - canvas.width/2)
+  const angle = Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2)
 
-  const velocity={
+  const velocity = {
     x: Math.cos(angle),
     y: Math.sin(angle)
   }
@@ -92,3 +148,4 @@ window.addEventListener("click", (event) => {
 })
 
 animate()
+spawnEnemies()
