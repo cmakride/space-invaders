@@ -66,6 +66,35 @@ class Enemy {
     this.y = this.y + this.velocity.y
   }
 }
+const friction = 0.99
+class Particle {
+  constructor(x, y, radius, color, velocity) {
+    this.x = x
+    this.y = y
+    this.radius = radius
+    this.color = color
+    this.velocity = velocity
+    this.alpha = 1
+  }
+  draw() {
+    ctx.save()
+    ctx.globalAlpha = this.alpha
+    ctx.beginPath()
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+    ctx.fillStyle = this.color
+    ctx.fill()
+    ctx.restore()
+  }
+  update() {
+    this.draw()
+    this.velocity.x *= friction
+    this.velocity.y *= friction
+    this.x = this.x + this.velocity.x
+    this.y = this.y + this.velocity.y
+    this.alpha -= 0.01
+
+  }
+}
 
 //!dynamically calculate what x and y should be based on the width and size of the canvas
 const x = canvas.width / 2
@@ -88,6 +117,7 @@ const projectile = new Projectile(
 //creates an array of each instance of a projectile or enemy
 const projectiles = []
 const enemies = []
+const particles = []
 
 function spawnEnemies() {
   //!Create instances of enemies, putting them at random places on the canvas and sending them towards the center
@@ -131,6 +161,15 @@ function animate() {
   //?drawing player 
   player.draw()
 
+  //!removing particles once they reach alpha value of 0
+  particles.forEach((particle, particleIdx) => {
+    if(particle.alpha <= 0){
+      particles.splice(particleIdx,1)
+    } else{
+      particle.update()
+    }
+  })
+
   projectiles.forEach((projectile, index) => {
     projectile.update()
     //* remove projectiles off screen in x axis
@@ -163,6 +202,11 @@ function animate() {
         // console.log("remove from screen")
         //? if collision detected remove the enemy and the projectile from their corresponding arrays
         //!TimeOut is trick to prevent flash from occuring when objects collide
+
+        //*Particle explosions
+        for(let i = 0; i < enemy.radius * 2  ; i++){
+          particles.push(new Particle(projectile.x,projectile.y,Math.random()*2,enemy.color, {x: (Math.random() - 0.5)*(Math.random() * 8), y:  (Math.random() - 0.5) * (Math.random() * 8) }))
+        }
         //* checking if larger than certain radius
         if (enemy.radius - 10 > 5) {
           gsap.to(enemy,{radius: enemy.radius - 10
