@@ -116,9 +116,10 @@ function spawnEnemies() {
 
 }
 
+let animationId
 //!animate function for animate loop, need to check on each loop if an enemy has hit the payer or is on the coordinates of the player
 function animate() {
-  requestAnimationFrame(animate)
+  animationId = requestAnimationFrame(animate)
 
   //? clearing the entire canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -130,7 +131,15 @@ function animate() {
   })
   enemies.forEach((enemy, enemyIdx) => {
     enemy.update()
-    //! in this loop test the distance between each projectile DETECT COLLISION ENEMY AND PROJECTILE
+    //* COLLISION ENEMY AND PLAYER
+    const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y)
+    //*end game
+    if (dist - enemy.radius - player.radius < 1) {
+      cancelAnimationFrame(animationId)
+    }
+
+    //! in this loop test the distance between each projectile DETECT 
+    //* COLLISION ENEMY AND PROJECTILE
     projectiles.forEach((projectile, projectileIdx) => {
       //!hypot distance between two points
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
