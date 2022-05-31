@@ -97,8 +97,8 @@ function spawnEnemies() {
     if (Math.random() < 0.5) {
       x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius
       y = Math.random() * canvas.height
-      // y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
-    }else{
+
+    } else {
       x = Math.random() * canvas.width
       y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
     }
@@ -116,6 +116,7 @@ function spawnEnemies() {
 
 }
 
+//!animate function for animate loop, need to check on each loop if an enemy has hit the payer or is on the coordinates of the player
 function animate() {
   requestAnimationFrame(animate)
 
@@ -127,8 +128,26 @@ function animate() {
   projectiles.forEach(projectile => {
     projectile.update()
   })
-  enemies.forEach((enemy) => {
+  enemies.forEach((enemy, enemyIdx) => {
     enemy.update()
+    //! in this loop test the distance between each projectile DETECT COLLISION ENEMY AND PROJECTILE
+    projectiles.forEach((projectile, projectileIdx) => {
+      //!hypot distance between two points
+      const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+      if (dist - enemy.radius - projectile.radius < 1) {
+        //?collision detection
+        // console.log("remove from screen")
+        //? if collision detected remove the enemy and the projectile from their corresponding arrays
+        //!TimeOut is trick to prevent flash from occuring when objects collide
+        setTimeout(()=>{
+          enemies.splice(enemyIdx, 1)
+          projectiles.splice(projectileIdx, 1)
+        },0)
+
+      }
+      //? really cool uncomment below and comment out the setInterval to see the distance changing for one projectile
+      // console.log(dist)
+    })
   })
 }
 
