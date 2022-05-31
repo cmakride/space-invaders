@@ -1,3 +1,5 @@
+//? test GSAP
+// console.log(gsap)
 
 //! calling canvas API object 
 const canvas = document.querySelector('canvas')
@@ -104,7 +106,7 @@ function spawnEnemies() {
     }
 
     //hsl first parameter is the color 0-360
-    const color = `hsl(${Math.random()*360}, 50%, 50%)`
+    const color = `hsl(${Math.random() * 360}, 50%, 50%)`
 
     const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x)
 
@@ -129,18 +131,18 @@ function animate() {
   //?drawing player 
   player.draw()
 
-  projectiles.forEach((projectile,index) => {
+  projectiles.forEach((projectile, index) => {
     projectile.update()
     //* remove projectiles off screen in x axis
-    if(projectile.x + projectile.radius < 0 || 
+    if (projectile.x + projectile.radius < 0 ||
       projectile.x - projectile.radius > canvas.width ||
       projectile.y + projectile.radius < 0 ||
-      projectile.y - projectile.radius > canvas.height){
-      setTimeout(()=>{
+      projectile.y - projectile.radius > canvas.height) {
+      setTimeout(() => {
         projectiles.splice(index, 1)
-      },0)
+      }, 0)
     }
-    
+
   })
   enemies.forEach((enemy, enemyIdx) => {
     enemy.update()
@@ -161,11 +163,19 @@ function animate() {
         // console.log("remove from screen")
         //? if collision detected remove the enemy and the projectile from their corresponding arrays
         //!TimeOut is trick to prevent flash from occuring when objects collide
-        setTimeout(()=>{
-          enemies.splice(enemyIdx, 1)
-          projectiles.splice(projectileIdx, 1)
-        },0)
-
+        //* checking if larger than certain radius
+        if (enemy.radius - 10 > 5) {
+          gsap.to(enemy,{radius: enemy.radius - 10
+          })
+          setTimeout(() => {
+            projectiles.splice(projectileIdx, 1)
+          }, 0)
+        } else {
+          setTimeout(() => {
+            enemies.splice(enemyIdx, 1)
+            projectiles.splice(projectileIdx, 1)
+          }, 0)
+        }
       }
       //? really cool uncomment below and comment out the setInterval to see the distance changing for one projectile
       // console.log(dist)
