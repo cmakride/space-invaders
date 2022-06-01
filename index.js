@@ -3,9 +3,11 @@
 
 //! calling canvas API object 
 const canvas = document.querySelector('canvas')
+
 const scoreEl = document.querySelector('#scoreEl')
 const modalEl = document.querySelector('#modalEl')
 const modalScoreEl = document.querySelector('#modalScoreEl')
+const buttonEl = document.querySelector('#buttonEl')
 const ctx = canvas.getContext('2d')
 
 canvas.width = innerWidth
@@ -103,7 +105,23 @@ class Particle {
 const x = canvas.width / 2
 const y = canvas.height / 2
 
-const player = new Player(x, y, 10, 'white')
+let player = new Player(x, y, 10, 'white')
+//creates an array of each instance of a projectile or enemy
+let projectiles = []
+let enemies = []
+let particles = []
+let animationId
+let intervalId
+let score = 0
+
+function init(){
+  player = new Player(x, y, 10, 'white')
+  projectiles = []
+  enemies = []
+  particles = []
+  animationId
+  score = 0
+}
 
 
 const projectile = new Projectile(
@@ -115,16 +133,12 @@ const projectile = new Projectile(
     x: -1,
     y: -1
   })
-//! loop through these projectiles array in the animate loop
-
-//creates an array of each instance of a projectile or enemy
-const projectiles = []
-const enemies = []
-const particles = []
+  //! loop through these projectiles array in the animate loop
+  
 
 function spawnEnemies() {
   //!Create instances of enemies, putting them at random places on the canvas and sending them towards the center
-  setInterval(() => {
+  intervalId = setInterval(() => {
     const radius = Math.random() * (30 - 4) + 4
     let x
     let y
@@ -152,8 +166,7 @@ function spawnEnemies() {
 
 }
 
-let animationId
-let score = 0
+
 //!animate function for animate loop, need to check on each loop if an enemy has hit the payer or is on the coordinates of the player
 function animate() {
   animationId = requestAnimationFrame(animate)
@@ -198,6 +211,7 @@ function animate() {
     //*end game
     if (dist - enemy.radius - player.radius < 1) {
       cancelAnimationFrame(animationId)
+      clearInterval(intervalId)
       modalScoreEl.innerHTML = score
       modalEl.style.display = 'block'
     }
@@ -253,6 +267,14 @@ window.addEventListener("click", (event) => {
 
   //!whenever we click that is when we generate a new particle and push it to the particles array
   projectiles.push(new Projectile(canvas.width / 2, canvas.height / 2, 5, 'white', velocity))
+
+})
+
+buttonEl.addEventListener('click',()=>{
+  init()
+  animate()
+  spawnEnemies()
+  modalEl.style.display = 'none'
 
 })
 
