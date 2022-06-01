@@ -265,18 +265,28 @@ function animate() {
   }
 }
 
-window.addEventListener("click", (event) => {
+function shoot({x, y}){
   //! finding angle of right angle formed of where clicked
-  const angle = Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2)
-
+  const angle = Math.atan2(y - canvas.height / 2, x - canvas.width / 2)
+  
   const velocity = {
     x: Math.cos(angle) * 5,
     y: Math.sin(angle) * 5
   }
-
+  
   //!whenever we click that is when we generate a new particle and push it to the particles array
   projectiles.push(new Projectile(canvas.width / 2, canvas.height / 2, 5, 'white', velocity))
+}
 
+window.addEventListener("click", (event) => {
+  shoot({x: event.clientX, y: event.clientY})
+})
+
+//!mobile event listener
+window.addEventListener('touchstart',(event)=>{
+  const x = event.touches[0].clientX
+  const y = event.touches[0].clientY
+  shoot({x, y})
 })
 
 //restart game
