@@ -4,6 +4,8 @@
 //! calling canvas API object 
 const canvas = document.querySelector('canvas')
 const scoreEl = document.querySelector('#scoreEl')
+const modalEl = document.querySelector('#modalEl')
+const modalScoreEl = document.querySelector('#modalScoreEl')
 const ctx = canvas.getContext('2d')
 
 canvas.width = innerWidth
@@ -196,6 +198,8 @@ function animate() {
     //*end game
     if (dist - enemy.radius - player.radius < 1) {
       cancelAnimationFrame(animationId)
+      modalScoreEl.innerHTML = score
+      modalEl.style.display = 'block'
     }
 
     //! in this loop test the distance between each projectile DETECT 
