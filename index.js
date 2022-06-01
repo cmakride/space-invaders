@@ -164,28 +164,32 @@ function animate() {
   player.draw()
 
   //!removing particles once they reach alpha value of 0
-  particles.forEach((particle, particleIdx) => {
-    if(particle.alpha <= 0){
-      particles.splice(particleIdx,1)
-    } else{
+  for (let particleIdx = particles.length - 1; particleIdx >= 0; particleIdx--) {
+    const particle = particles[particleIdx]
+  
+    if (particle.alpha <= 0) {
+      particles.splice(particleIdx, 1)
+    } else {
       particle.update()
     }
-  })
+  }
 
-  projectiles.forEach((projectile, index) => {
+  for (let index = projectiles.length - 1; index >= 0; index--) {
+    const projectile = projectiles[index]
+
     projectile.update()
     //* remove projectiles off screen in x axis
     if (projectile.x + projectile.radius < 0 ||
       projectile.x - projectile.radius > canvas.width ||
       projectile.y + projectile.radius < 0 ||
       projectile.y - projectile.radius > canvas.height) {
-      setTimeout(() => {
-        projectiles.splice(index, 1)
-      }, 0)
+      projectiles.splice(index, 1)
     }
+  }
 
-  })
-  enemies.forEach((enemy, enemyIdx) => {
+  for (let enemyIdx = enemies.length - 1; enemyIdx >= 0; enemyIdx--) {
+    const enemy = enemies[enemyIdx]
+
     enemy.update()
     //* COLLISION ENEMY AND PLAYER
     const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y)
@@ -196,7 +200,8 @@ function animate() {
 
     //! in this loop test the distance between each projectile DETECT 
     //* COLLISION ENEMY AND PROJECTILE
-    projectiles.forEach((projectile, projectileIdx) => {
+    for (let projectileIdx = projectiles.length - 1; projectileIdx >= 0; projectileIdx--) {
+      const projectile = projectiles[projectileIdx]
       //!hypot distance between two points
       const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
       if (dist - enemy.radius - projectile.radius < 1) {
@@ -206,33 +211,31 @@ function animate() {
         //!TimeOut is trick to prevent flash from occuring when objects collide
 
         //*Particle explosions
-        for(let i = 0; i < enemy.radius * 2  ; i++){
-          particles.push(new Particle(projectile.x,projectile.y,Math.random()*2,enemy.color, {x: (Math.random() - 0.5)*(Math.random() * 8), y:  (Math.random() - 0.5) * (Math.random() * 8) }))
+        for (let i = 0; i < enemy.radius * 2; i++) {
+          particles.push(new Particle(projectile.x, projectile.y, Math.random() * 2, enemy.color, { x: (Math.random() - 0.5) * (Math.random() * 8), y: (Math.random() - 0.5) * (Math.random() * 8) }))
         }
         //* checking if larger than certain radius
         //this is where shrink enemy
         if (enemy.radius - 10 > 5) {
           score += 100
           scoreEl.innerHTML = score
-          gsap.to(enemy,{radius: enemy.radius - 10
+          gsap.to(enemy, {
+            radius: enemy.radius - 10
           })
-          setTimeout(() => {
-            projectiles.splice(projectileIdx, 1)
-          }, 0)
+          projectiles.splice(projectileIdx, 1)
+
           //remove enemy if they are too small
         } else {
           score += 150
           scoreEl.innerHTML = score
-          setTimeout(() => {
-            enemies.splice(enemyIdx, 1)
-            projectiles.splice(projectileIdx, 1)
-          }, 0)
+          enemies.splice(enemyIdx, 1)
+          projectiles.splice(projectileIdx, 1)
         }
       }
       //? really cool uncomment below and comment out the setInterval to see the distance changing for one projectile
       // console.log(dist)
-    })
-  })
+    }
+  }
 }
 
 window.addEventListener("click", (event) => {
@@ -244,7 +247,6 @@ window.addEventListener("click", (event) => {
     y: Math.sin(angle) * 5
   }
 
-  console.log(angle)
   //!whenever we click that is when we generate a new particle and push it to the particles array
   projectiles.push(new Projectile(canvas.width / 2, canvas.height / 2, 5, 'white', velocity))
 
