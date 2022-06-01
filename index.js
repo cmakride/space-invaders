@@ -12,6 +12,7 @@ const startButtonEl = document.querySelector('#startButtonEl')
 const startEl = document.querySelector('#startEl')
 const ctx = canvas.getContext('2d')
 
+
 canvas.width = innerWidth
 canvas.height = innerHeight
 
@@ -103,11 +104,7 @@ class Particle {
   }
 }
 
-//!dynamically calculate what x and y should be based on the width and size of the canvas
-const x = canvas.width / 2
-const y = canvas.height / 2
 
-let player = new Player(x, y, 10, 'white')
 //creates an array of each instance of a projectile or enemy
 let projectiles = []
 let enemies = []
@@ -117,6 +114,9 @@ let intervalId
 let score = 0
 
 function init() {
+  //!dynamically calculate what x and y should be based on the width and size of the canvas
+  const x = canvas.width / 2
+  const y = canvas.height / 2
   player = new Player(x, y, 10, 'white')
   projectiles = []
   enemies = []
@@ -313,3 +313,8 @@ startButtonEl.addEventListener('click', () => {
   })
 })
 
+window.addEventListener('resize', () => {
+  canvas.width = innerWidth
+  canvas.height = innerHeight
+  init()
+})
