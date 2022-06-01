@@ -3,6 +3,7 @@
 
 //! calling canvas API object 
 const canvas = document.querySelector('canvas')
+const scoreEl = document.querySelector('#scoreEl')
 const ctx = canvas.getContext('2d')
 
 canvas.width = innerWidth
@@ -150,6 +151,7 @@ function spawnEnemies() {
 }
 
 let animationId
+let score = 0
 //!animate function for animate loop, need to check on each loop if an enemy has hit the payer or is on the coordinates of the player
 function animate() {
   animationId = requestAnimationFrame(animate)
@@ -208,13 +210,19 @@ function animate() {
           particles.push(new Particle(projectile.x,projectile.y,Math.random()*2,enemy.color, {x: (Math.random() - 0.5)*(Math.random() * 8), y:  (Math.random() - 0.5) * (Math.random() * 8) }))
         }
         //* checking if larger than certain radius
+        //this is where shrink enemy
         if (enemy.radius - 10 > 5) {
+          score += 100
+          scoreEl.innerHTML = score
           gsap.to(enemy,{radius: enemy.radius - 10
           })
           setTimeout(() => {
             projectiles.splice(projectileIdx, 1)
           }, 0)
+          //remove enemy if they are too small
         } else {
+          score += 150
+          scoreEl.innerHTML = score
           setTimeout(() => {
             enemies.splice(enemyIdx, 1)
             projectiles.splice(projectileIdx, 1)
