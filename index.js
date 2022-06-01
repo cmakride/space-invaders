@@ -8,6 +8,8 @@ const scoreEl = document.querySelector('#scoreEl')
 const modalEl = document.querySelector('#modalEl')
 const modalScoreEl = document.querySelector('#modalScoreEl')
 const buttonEl = document.querySelector('#buttonEl')
+const startButtonEl = document.querySelector('#startButtonEl')
+const startEl = document.querySelector('#startEl')
 const ctx = canvas.getContext('2d')
 
 canvas.width = innerWidth
@@ -114,7 +116,7 @@ let animationId
 let intervalId
 let score = 0
 
-function init(){
+function init() {
   player = new Player(x, y, 10, 'white')
   projectiles = []
   enemies = []
@@ -133,8 +135,8 @@ const projectile = new Projectile(
     x: -1,
     y: -1
   })
-  //! loop through these projectiles array in the animate loop
-  
+//! loop through these projectiles array in the animate loop
+
 
 function spawnEnemies() {
   //!Create instances of enemies, putting them at random places on the canvas and sending them towards the center
@@ -181,7 +183,7 @@ function animate() {
   //!removing particles once they reach alpha value of 0
   for (let particleIdx = particles.length - 1; particleIdx >= 0; particleIdx--) {
     const particle = particles[particleIdx]
-  
+
     if (particle.alpha <= 0) {
       particles.splice(particleIdx, 1)
     } else {
@@ -270,7 +272,7 @@ window.addEventListener("click", (event) => {
 
 })
 
-buttonEl.addEventListener('click',()=>{
+buttonEl.addEventListener('click', () => {
   init()
   animate()
   spawnEnemies()
@@ -278,5 +280,10 @@ buttonEl.addEventListener('click',()=>{
 
 })
 
-animate()
-spawnEnemies()
+startButtonEl.addEventListener('click', () => {
+  init()
+  animate()
+  spawnEnemies()
+  startEl.style.display = 'none'
+})
+
