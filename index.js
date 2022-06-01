@@ -123,6 +123,7 @@ function init() {
   particles = []
   animationId
   score = 0
+  scoreEl.innerHTML = 0
 }
 
 
@@ -215,7 +216,13 @@ function animate() {
       cancelAnimationFrame(animationId)
       clearInterval(intervalId)
       modalScoreEl.innerHTML = score
+
       modalEl.style.display = 'block'
+      gsap.fromTo('#modalEl', { scale: 0.8, opacity: 0 }, {
+        scale: 1,
+        opacity: 1,
+        ease: 'expo'
+      })
     }
 
     //! in this loop test the distance between each projectile DETECT 
@@ -272,18 +279,37 @@ window.addEventListener("click", (event) => {
 
 })
 
+//restart game
 buttonEl.addEventListener('click', () => {
   init()
   animate()
   spawnEnemies()
-  modalEl.style.display = 'none'
 
+  gsap.to('#modalEl', {
+    opacity: 0,
+    scale: 0.8,
+    duration: 0.2,
+    ease: 'expo.in',
+    onComplete: () => {
+      modalEl.style.display = 'none'
+    }
+  })
 })
 
+//start game
 startButtonEl.addEventListener('click', () => {
   init()
   animate()
   spawnEnemies()
-  startEl.style.display = 'none'
+
+  gsap.to('#startEl', {
+    opacity: 0,
+    scale: 0.8,
+    duration: 0.2,
+    ease: 'expo.in',
+    onComplete: () => {
+      startEl.style.display = 'none'
+    }
+  })
 })
 
