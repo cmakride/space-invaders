@@ -244,6 +244,7 @@ function animate() {
         //* checking if larger than certain radius
         //this is where shrink enemy
         if (enemy.radius - 10 > 5) {
+          audio.damage.play()
           score += 100
           scoreEl.innerHTML = score
           gsap.to(enemy, {
@@ -253,6 +254,7 @@ function animate() {
 
           //remove enemy if they are too small
         } else {
+          audio.destroy.play()
           score += 150
           scoreEl.innerHTML = score
           enemies.splice(enemyIdx, 1)
@@ -276,6 +278,7 @@ function shoot({x, y}){
   
   //!whenever we click that is when we generate a new particle and push it to the particles array
   projectiles.push(new Projectile(canvas.width / 2, canvas.height / 2, 5, 'white', velocity))
+  audio.shoot.play()
 }
 
 window.addEventListener("click", (event) => {
