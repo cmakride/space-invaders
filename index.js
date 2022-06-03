@@ -10,6 +10,9 @@ const modalScoreEl = document.querySelector('#modalScoreEl')
 const buttonEl = document.querySelector('#buttonEl')
 const startButtonEl = document.querySelector('#startButtonEl')
 const startEl = document.querySelector('#startEl')
+const volumeUpEl = document.querySelector('#volumeUpEl')
+const volumeDownEl = document.querySelector('#volumeDownEl')
+
 const ctx = canvas.getContext('2d')
 
 
@@ -115,6 +118,7 @@ let score = 0
 let game = {
   active: false
 }
+let audioInitialized = false
 
 function init() {
   //!dynamically calculate what x and y should be based on the width and size of the canvas
@@ -293,16 +297,18 @@ function shoot({ x, y }) {
 }
 
 window.addEventListener("click", (event) => {
-  if(!audio.background.playing()){
+  if (!audio.background.playing() && !audioInitialized) {
     audio.background.play()
+    audioInitialized = true
   }
   shoot({ x: event.clientX, y: event.clientY })
 })
 
 //!mobile event listener
 window.addEventListener('touchstart', (event) => {
-  if(!audio.background.playing()){
+  if (!audio.background.playing() && !audioInitialized) {
     audio.background.play()
+    audioInitialized = true
   }
   const x = event.touches[0].clientX
   const y = event.touches[0].clientY
@@ -349,4 +355,17 @@ window.addEventListener('resize', () => {
   canvas.width = innerWidth
   canvas.height = innerHeight
   init()
+})
+
+volumeUpEl.addEventListener('click', () => {
+  if (audioInitialized){audio.background.pause()
+  volumeUpEl.style.display = 'none'
+  volumeDownEl.style.display = 'block'
+  }
+})
+
+volumeDownEl.addEventListener('click', () => {
+    audio.background.play()
+    volumeDownEl.style.display = 'none'
+    volumeUpEl.style.display = 'block'
 })

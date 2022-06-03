@@ -1,14 +1,8 @@
 <!-- !mobile responsive -->
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 <!-- !end MR -->
 <!-- ? Favicon -->
-<link 
-  id="favicon" 
-  rel="icon"
-  href="./images/favicon-32x32.png"
-  type="image/png" 
-  sizes="32x32"
->
+<link id="favicon" rel="icon" href="./images/favicon-32x32.png" type="image/png" sizes="32x32">
 <!-- ? End Favicon -->
 <title>Space Invaders</title>
 <style>
@@ -17,7 +11,8 @@
     font-family: sans-serif;
     background-color: black;
   }
-  *{
+
+  * {
     touch-action: none;
   }
 </style>
@@ -29,9 +24,28 @@ font-size: 1rem;
 user-select: none;">
   <span>Score: <span id="scoreEl">0</span></span>
 </div>
+<div style="position: absolute;
+top: 0;
+right: 0;
+padding: 8px;
+color: white;">
 
-<div id="modalEl"
-style="
+  <img id="volumeUpEl" style="
+width: 32px;
+height: 32px;
+user-select: none;
+cursor: pointer;" src="./images/sound.png" alt="Mute Music">
+  <img id="volumeDownEl" style="
+  display: none;
+width: 32px;
+height: 32px;
+user-select: none;
+cursor: pointer;" src="./images/mute.png" alt="Play Music">
+
+</div>
+
+
+<div id="modalEl" style="
 display: none;
 position: absolute; 
 background-color: aliceblue;
@@ -49,8 +63,7 @@ border-radius: 5px;
   color: gray;
   user-select: none;
   ">GAME OVER</label>
-  <h1 id="modalScoreEl"
-  style="
+  <h1 id="modalScoreEl" style="
   user-select: none;
   font-size: 48px;
   margin-bottom: 0;
@@ -62,8 +75,7 @@ border-radius: 5px;
   font-size: 14px;
   color: gray;
   ">Points</p>
-  <button id="buttonEl" 
-  style="
+  <button id="buttonEl" style="
   margin-top: 12px; 
   background-color: blue;
   border: none;
@@ -74,8 +86,7 @@ border-radius: 5px;
   ">Restart Game</button>
 </div>
 
-<div id="startEl"
-style="
+<div id="startEl" style="
 display: block;
 position: absolute; 
 background-color: aliceblue;
@@ -88,17 +99,15 @@ text-align: center;
 border-radius: 5px;
 
 ">
-  
-  <h1
-  style="
+
+  <h1 style="
   user-select: none;
   font-size: 24px;
   margin-bottom: 0;
   margin-top: 8px;
   ">Base Defense Game</h1>
-  
-  <button id="startButtonEl" 
-  style="
+
+  <button id="startButtonEl" style="
   margin-top: 12px; 
   background-color: blue;
   border: none;
@@ -111,7 +120,9 @@ border-radius: 5px;
 
 <canvas></canvas>
 <!-- ? Howler Sound link -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js" integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"
+  integrity="sha512-6+YN/9o9BWrk6wSfGxQGpt3EUK6XeHi6yeHV+TYD2GR0Sj/cggRpXr1BrAQf0as6XslxomMUxXp2vIl+fv0QRA=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- ? END Howler Sound link -->
 <!-- ! animation link -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"
