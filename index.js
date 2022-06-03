@@ -112,6 +112,9 @@ let particles = []
 let animationId
 let intervalId
 let score = 0
+let game = {
+  active: false
+}
 
 function init() {
   //!dynamically calculate what x and y should be based on the width and size of the canvas
@@ -124,6 +127,9 @@ function init() {
   animationId
   score = 0
   scoreEl.innerHTML = 0
+  game = {
+    active: true
+  }
 }
 
 
@@ -215,6 +221,9 @@ function animate() {
     if (dist - enemy.radius - player.radius < 1) {
       cancelAnimationFrame(animationId)
       clearInterval(intervalId)
+      audio.death.play()
+      game.active = false
+
       modalScoreEl.innerHTML = score
 
       modalEl.style.display = 'block'
@@ -267,33 +276,36 @@ function animate() {
   }
 }
 
-function shoot({x, y}){
-  //! finding angle of right angle formed of where clicked
-  const angle = Math.atan2(y - canvas.height / 2, x - canvas.width / 2)
-  
-  const velocity = {
-    x: Math.cos(angle) * 5,
-    y: Math.sin(angle) * 5
+function shoot({ x, y }) {
+  if (game.active) {
+    //! finding angle of right angle formed of where clicked
+    const angle = Math.atan2(y - canvas.height / 2, x - canvas.width / 2)
+
+    const velocity = {
+      x: Math.cos(angle) * 5,
+      y: Math.sin(angle) * 5
+    }
+
+    //!whenever we click that is when we generate a new particle and push it to the particles array
+    projectiles.push(new Projectile(canvas.width / 2, canvas.height / 2, 5, 'white', velocity))
+    audio.shoot.play()
   }
-  
-  //!whenever we click that is when we generate a new particle and push it to the particles array
-  projectiles.push(new Projectile(canvas.width / 2, canvas.height / 2, 5, 'white', velocity))
-  audio.shoot.play()
 }
 
 window.addEventListener("click", (event) => {
-  shoot({x: event.clientX, y: event.clientY})
+  shoot({ x: event.clientX, y: event.clientY })
 })
 
 //!mobile event listener
-window.addEventListener('touchstart',(event)=>{
+window.addEventListener('touchstart', (event) => {
   const x = event.touches[0].clientX
   const y = event.touches[0].clientY
-  shoot({x, y})
+  shoot({ x, y })
 })
 
 //restart game
 buttonEl.addEventListener('click', () => {
+  audio.select.play()
   init()
   animate()
   spawnEnemies()
@@ -311,6 +323,7 @@ buttonEl.addEventListener('click', () => {
 
 //start game
 startButtonEl.addEventListener('click', () => {
+  audio.select.play()
   init()
   animate()
   spawnEnemies()
