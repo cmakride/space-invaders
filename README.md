@@ -9,7 +9,7 @@ Technologies Used:
 
 Future Enhancements:
 
-1. Music
+1. ~~Background Music~~
 2. ~~Sounds~~
 3. Player Movement
 4. PowerUps

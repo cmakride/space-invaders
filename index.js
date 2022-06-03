@@ -293,11 +293,17 @@ function shoot({ x, y }) {
 }
 
 window.addEventListener("click", (event) => {
+  if(!audio.background.playing()){
+    audio.background.play()
+  }
   shoot({ x: event.clientX, y: event.clientY })
 })
 
 //!mobile event listener
 window.addEventListener('touchstart', (event) => {
+  if(!audio.background.playing()){
+    audio.background.play()
+  }
   const x = event.touches[0].clientX
   const y = event.touches[0].clientY
   shoot({ x, y })
